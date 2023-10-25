@@ -1,0 +1,22 @@
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Who to greet?'
+        required: false
+        default: 'World'
+
+jobs:
+  manual:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: hello
+        uses: ./
+        with:
+          who-to-greet: ${{ github.event.inputs.name }}
+      - run: echo random-number ${{ steps.hello.outputs.random-number }}
+        shell: bash
